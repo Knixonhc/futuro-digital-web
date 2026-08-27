@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://futurodigitalec.com/sitemap.xml
