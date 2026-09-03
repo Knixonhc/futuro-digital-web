@@ -44,6 +44,7 @@ const iconBars='<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d=
 const iconClose='<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke-width="2" stroke-linecap="round"/></svg>';
 const backdrop=document.createElement('div');
 backdrop.className='mobile-nav-backdrop';
+backdrop.style.zIndex='40';
 document.body.appendChild(backdrop);
 
 function setMenu(open){
@@ -114,7 +115,6 @@ if(carousel&&prev&&next){
   next.addEventListener('click',()=>carousel.scrollBy({left:step(),behavior:'smooth'}));
 }
 
-// Short same-site page transition. Modified clicks, downloads, hashes and external links remain native.
 document.addEventListener('click',e=>{
   const a=e.target.closest('a[href]');
   if(!a||e.defaultPrevented||e.button!==0||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey)return;
