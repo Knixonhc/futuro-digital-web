@@ -1,0 +1,97 @@
+name: Vendor external images
+
+on:
+  push:
+    paths:
+      - '.github/workflows/vendor-assets.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  vendor-assets:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download external images
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p assets/img/people assets/img/nutri assets/img/portfolio/estracoach assets/img/portfolio/history
+
+          curl -L --fail --retry 3 'https://images.pexels.com/photos/7888673/pexels-photo-7888673.jpeg?cs=srgb&dl=pexels-rdne-7888673.jpg&fm=jpg' -o assets/img/people/hero-team.jpg
+          curl -L --fail --retry 3 'https://images.pexels.com/photos/3932230/pexels-photo-3932230.jpeg?cs=srgb&dl=pexels-olly-3932230.jpg&fm=jpg' -o assets/img/people/collaboration.jpg
+          curl -L --fail --retry 3 'https://images.pexels.com/photos/7108815/pexels-photo-7108815.jpeg?cs=srgb&dl=pexels-tiger-lily-7108815.jpg&fm=jpg' -o assets/img/people/strategy.jpg
+          curl -L --fail --retry 3 'https://images.pexels.com/photos/9301836/pexels-photo-9301836.jpeg?cs=srgb&dl=pexels-mikhail-nilov-9301836.jpg&fm=jpg' -o assets/img/people/project-collaboration.jpg
+          curl -L --fail --retry 3 'https://images.pexels.com/photos/7652128/pexels-photo-7652128.jpeg?cs=srgb&dl=pexels-thirdman-7652128.jpg&fm=jpg' -o assets/img/people/about-team.jpg
+          curl -L --fail --retry 3 'https://images.pexels.com/photos/9908670/pexels-photo-9908670.jpeg?cs=srgb&dl=pexels-ron-lach-9908670.jpg&fm=jpg' -o assets/img/people/contact-meeting.jpg
+
+          NUTRI='https://raw.githubusercontent.com/Knixonhc/nutri-organicos-web/main/assets/images'
+          curl -L --fail --retry 3 "$NUTRI/aplicacion-campo.webp" -o assets/img/nutri/aplicacion-campo.webp
+          curl -L --fail --retry 3 "$NUTRI/bactribiol.webp" -o assets/img/nutri/bactribiol.webp
+          curl -L --fail --retry 3 "$NUTRI/cacao-resultado-1.webp" -o assets/img/nutri/cacao-resultado-1.webp
+          curl -L --fail --retry 3 "$NUTRI/raices-banano.webp" -o assets/img/nutri/raices-banano.webp
+
+          BASE='https://raw.githubusercontent.com/Knixonhc/Kenji_Herrera/43885ed59f9836b214b163a19b79d67db864083b/assets/img/portfolio'
+          for n in 1 2 3 4; do curl -L --fail --retry 3 "$BASE/estracoach/estracoach$n.png" -o "assets/img/portfolio/estracoach/estracoach$n.png"; done
+          curl -L --fail --retry 3 "$BASE/grandoffice/grandoffice1.png" -o assets/img/portfolio/history/grandoffice1.png
+          curl -L --fail --retry 3 "$BASE/venezia/venezia1.png" -o assets/img/portfolio/history/venezia1.png
+          curl -L --fail --retry 3 "$BASE/grandstore/grandstore1.png" -o assets/img/portfolio/history/grandstore1.png
+          curl -L --fail --retry 3 "$BASE/circuitosfacil/circuitosfacil1.png" -o assets/img/portfolio/history/circuitosfacil1.png
+          curl -L --fail --retry 3 "$BASE/globaluniversity/global1.png" -o assets/img/portfolio/history/global1.png
+          curl -L --fail --retry 3 "$BASE/designsoft/designsoft1.png" -o assets/img/portfolio/history/designsoft1.png
+
+      - name: Replace hotlinks with local paths
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          replacements = {
+            'https://images.pexels.com/photos/7888673/pexels-photo-7888673.jpeg?cs=srgb&amp;dl=pexels-rdne-7888673.jpg&amp;fm=jpg':'assets/img/people/hero-team.jpg',
+            'https://images.pexels.com/photos/3932230/pexels-photo-3932230.jpeg?cs=srgb&amp;dl=pexels-olly-3932230.jpg&amp;fm=jpg':'assets/img/people/collaboration.jpg',
+            'https://images.pexels.com/photos/7108815/pexels-photo-7108815.jpeg?cs=srgb&amp;dl=pexels-tiger-lily-7108815.jpg&amp;fm=jpg':'assets/img/people/strategy.jpg',
+            'https://images.pexels.com/photos/9301836/pexels-photo-9301836.jpeg?cs=srgb&amp;dl=pexels-mikhail-nilov-9301836.jpg&amp;fm=jpg':'assets/img/people/project-collaboration.jpg',
+            'https://images.pexels.com/photos/7652128/pexels-photo-7652128.jpeg?cs=srgb&amp;dl=pexels-thirdman-7652128.jpg&amp;fm=jpg':'assets/img/people/about-team.jpg',
+            'https://images.pexels.com/photos/9908670/pexels-photo-9908670.jpeg?cs=srgb&amp;dl=pexels-ron-lach-9908670.jpg&amp;fm=jpg':'assets/img/people/contact-meeting.jpg',
+            'https://raw.githubusercontent.com/Knixonhc/nutri-organicos-web/main/assets/images/aplicacion-campo.webp':'assets/img/nutri/aplicacion-campo.webp',
+            'https://raw.githubusercontent.com/Knixonhc/nutri-organicos-web/main/assets/images/bactribiol.webp':'assets/img/nutri/bactribiol.webp',
+            'https://raw.githubusercontent.com/Knixonhc/nutri-organicos-web/main/assets/images/cacao-resultado-1.webp':'assets/img/nutri/cacao-resultado-1.webp',
+            'https://raw.githubusercontent.com/Knixonhc/nutri-organicos-web/main/assets/images/raices-banano.webp':'assets/img/nutri/raices-banano.webp',
+          }
+          base='https://raw.githubusercontent.com/Knixonhc/Kenji_Herrera/43885ed59f9836b214b163a19b79d67db864083b/assets/img/portfolio'
+          for n in range(1,5): replacements[f'{base}/estracoach/estracoach{n}.png']=f'assets/img/portfolio/estracoach/estracoach{n}.png'
+          replacements.update({
+            f'{base}/grandoffice/grandoffice1.png':'assets/img/portfolio/history/grandoffice1.png',
+            f'{base}/venezia/venezia1.png':'assets/img/portfolio/history/venezia1.png',
+            f'{base}/grandstore/grandstore1.png':'assets/img/portfolio/history/grandstore1.png',
+            f'{base}/circuitosfacil/circuitosfacil1.png':'assets/img/portfolio/history/circuitosfacil1.png',
+            f'{base}/globaluniversity/global1.png':'assets/img/portfolio/history/global1.png',
+            f'{base}/designsoft/designsoft1.png':'assets/img/portfolio/history/designsoft1.png',
+          })
+          for path in Path('.').glob('*.html'):
+            text=path.read_text(encoding='utf-8')
+            for old,new in replacements.items(): text=text.replace(old,new)
+            path.write_text(text,encoding='utf-8')
+          PY
+
+          if grep -R 'src="https://' --include='*.html' .; then
+            echo 'There are still external image src URLs in HTML.' >&2
+            exit 1
+          fi
+
+      - name: Commit vendored assets
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add assets/img *.html
+          if git diff --cached --quiet; then
+            echo 'Nothing to commit.'
+            exit 0
+          fi
+          git commit -m 'Aloja imágenes localmente en el repositorio'
+          git push origin HEAD:main
