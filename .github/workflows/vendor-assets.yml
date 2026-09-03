@@ -32,7 +32,7 @@ jobs:
           NUTRI='https://raw.githubusercontent.com/Knixonhc/nutri-organicos-web/main/assets/images'
           curl -L --fail --retry 3 "$NUTRI/aplicacion-campo.webp" -o assets/img/nutri/aplicacion-campo.webp
           curl -L --fail --retry 3 "$NUTRI/bactribiol.webp" -o assets/img/nutri/bactribiol.webp
-          curl -L --fail --retry 3 "$NUTRI/cacao-resultado-1.webp" -o assets/img/nutri/cacao-resultado-1.webp
+          curl -L --fail --retry 3 "$NUTRI/cacao-resultado-2.webp" -o assets/img/nutri/cacao-resultado-2.webp
           curl -L --fail --retry 3 "$NUTRI/raices-banano.webp" -o assets/img/nutri/raices-banano.webp
 
           BASE='https://raw.githubusercontent.com/Knixonhc/Kenji_Herrera/43885ed59f9836b214b163a19b79d67db864083b/assets/img/portfolio'
@@ -59,7 +59,7 @@ jobs:
             'https://images.pexels.com/photos/9908670/pexels-photo-9908670.jpeg?cs=srgb&amp;dl=pexels-ron-lach-9908670.jpg&amp;fm=jpg':'assets/img/people/contact-meeting.jpg',
             'https://raw.githubusercontent.com/Knixonhc/nutri-organicos-web/main/assets/images/aplicacion-campo.webp':'assets/img/nutri/aplicacion-campo.webp',
             'https://raw.githubusercontent.com/Knixonhc/nutri-organicos-web/main/assets/images/bactribiol.webp':'assets/img/nutri/bactribiol.webp',
-            'https://raw.githubusercontent.com/Knixonhc/nutri-organicos-web/main/assets/images/cacao-resultado-1.webp':'assets/img/nutri/cacao-resultado-1.webp',
+            'https://raw.githubusercontent.com/Knixonhc/nutri-organicos-web/main/assets/images/cacao-resultado-2.webp':'assets/img/nutri/cacao-resultado-2.webp',
             'https://raw.githubusercontent.com/Knixonhc/nutri-organicos-web/main/assets/images/raices-banano.webp':'assets/img/nutri/raices-banano.webp',
           }
           base='https://raw.githubusercontent.com/Knixonhc/Kenji_Herrera/43885ed59f9836b214b163a19b79d67db864083b/assets/img/portfolio'
