@@ -68,10 +68,10 @@ document.querySelectorAll('.feature-list article').forEach((article,i)=>{if(arti
 
 /* Project visual transformation */
 const projectMap={
-  'Arzana Reformas':{img:'assets/img/people/arzana-renovation.jpg',cls:'project-arzana',mark:'AR',label:'ARZANA REFORMAS',sub:'Reformas integrales'},
+  'Arzana Reformas':{img:'assets/img/people/arzana-renovation.jpg',cls:'project-arzana',logo:'assets/img/brands/arzana-logo.svg',label:'ARZANA REFORMAS',sub:'Reformas integrales'},
   'Nutri Orgánicos del Campo':{img:'assets/img/nutri/aplicacion-campo.webp',cls:'project-nutri',logo:'assets/img/brands/nutri-logo.png',label:'Nutri Orgánicos',sub:'Agricultura'},
-  'CDECO':{img:'assets/img/people/cdeco-ultrasound.jpg',cls:'project-cdeco',mark:'CD',label:'CDECO',sub:'Salud integral'},
-  'Estracoach':{img:'assets/img/people/estracoach-coaching.jpg',cls:'project-estracoach',mark:'ES',label:'ESTRACOACH',sub:'Consultoría & coaching'},
+  'CDECO':{img:'assets/img/people/cdeco-ultrasound.jpg',cls:'project-cdeco',logo:'assets/img/brands/cdeco-logo.svg',label:'CDECO',sub:'Salud integral'},
+  'Estracoach':{img:'assets/img/people/estracoach-coaching.jpg',cls:'project-estracoach',logo:'assets/img/brands/estracoach-logo.svg',label:'ESTRACOACH',sub:'Consultoría & coaching'},
   'Grandoffice':{cls:'project-grandoffice',mark:'GO',label:'GRANDOFFICE',sub:'Servicios empresariales'},
   'Venezia Foods':{cls:'project-venezia',mark:'VF',label:'VENEZIA FOODS',sub:'E-commerce'},
   'GrandStore Ecuador':{cls:'project-grandstore',mark:'GS',label:'GRANDSTORE',sub:'E-commerce'},
