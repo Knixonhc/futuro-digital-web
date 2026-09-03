@@ -1,6 +1,5 @@
 document.documentElement.classList.add('js');
 
-// Global v3 visual layer.
 if(!document.querySelector('link[href="assets/css/v3.css"]')){
   const v3=document.createElement('link');
   v3.rel='stylesheet';
@@ -21,7 +20,6 @@ const header=document.querySelector('.site-header');
 const menu=document.querySelector('.menu');
 const links=document.querySelector('.links');
 
-// Keep navigation consistent across every page.
 if(links){
   const all=[...links.querySelectorAll(':scope > a')];
   const cta=all.find(a=>a.classList.contains('btn'));
@@ -66,7 +64,6 @@ if(menu&&links){
   window.addEventListener('resize',()=>{if(innerWidth>980)setMenu(false)},{passive:true});
 }
 
-// Header state + subtle scroll progress.
 const progress=document.createElement('div');
 progress.className='scroll-progress';
 document.body.appendChild(progress);
@@ -78,7 +75,6 @@ function onScroll(){
 onScroll();
 addEventListener('scroll',onScroll,{passive:true});
 
-// Reveal system — motion is progressive enhancement and respects reduced motion in CSS.
 const revealSelectors=[
   '.section-head','.content-grid > *','.service-links > *','.portfolio-grid > article',
   '.process > li','.feature-list > article','.purpose-card','.value-card','.journey > article',
@@ -102,7 +98,6 @@ if('IntersectionObserver' in window){
   revealItems.forEach(el=>io.observe(el));
 }else revealItems.forEach(el=>el.classList.add('is-visible'));
 
-// Footer: one compact, unified copyright line everywhere.
 const footerBottom=document.querySelector('.footer-bottom');
 if(footerBottom){
   footerBottom.innerHTML='© <span id="year"></span> Futuro Digital Ecuador · Guayaquil · Ecuador · Proyectos en todo el mundo';
@@ -110,7 +105,6 @@ if(footerBottom){
 const year=document.querySelector('#year');
 if(year)year.textContent=new Date().getFullYear();
 
-// Legacy project carousel support.
 const carousel=document.querySelector('#project-carousel');
 const prev=document.querySelector('.carousel-btn.prev');
 const next=document.querySelector('.carousel-btn.next');
@@ -119,6 +113,22 @@ if(carousel&&prev&&next){
   prev.addEventListener('click',()=>carousel.scrollBy({left:-step(),behavior:'smooth'}));
   next.addEventListener('click',()=>carousel.scrollBy({left:step(),behavior:'smooth'}));
 }
+
+// Short same-site page transition. Modified clicks, downloads, hashes and external links remain native.
+document.addEventListener('click',e=>{
+  const a=e.target.closest('a[href]');
+  if(!a||e.defaultPrevented||e.button!==0||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey)return;
+  if(a.target==='_blank'||a.hasAttribute('download'))return;
+  const href=a.getAttribute('href');
+  if(!href||href.startsWith('#')||href.startsWith('mailto:')||href.startsWith('tel:')||href.startsWith('javascript:'))return;
+  const url=new URL(a.href,location.href);
+  if(url.origin!==location.origin)return;
+  if(url.pathname===location.pathname&&url.search===location.search)return;
+  e.preventDefault();
+  setMenu(false);
+  document.body.classList.add('page-leaving');
+  setTimeout(()=>{location.href=url.href},170);
+});
 
 const form=document.querySelector('#demo-form');
 const note=document.querySelector('#form-note');
