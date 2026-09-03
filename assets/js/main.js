@@ -19,6 +19,8 @@ requestAnimationFrame(()=>requestAnimationFrame(()=>document.body.classList.add(
 const header=document.querySelector('.site-header');
 const menu=document.querySelector('.menu');
 const links=document.querySelector('.links');
+let servicesNav=null;
+let submenuToggle=null;
 
 if(links){
   const all=[...links.querySelectorAll(':scope > a')];
@@ -38,6 +40,55 @@ if(links){
     const href=(a.getAttribute('href')||'').split('#')[0].toLowerCase();
     if(href===current)a.setAttribute('aria-current','page');
   });
+
+  const servicesLink=regular.find(a=>(a.getAttribute('href')||'').split('#')[0].toLowerCase()==='servicios.html');
+  if(servicesLink){
+    servicesNav=document.createElement('div');
+    servicesNav.className='nav-item services-nav';
+    links.insertBefore(servicesNav,servicesLink);
+    servicesNav.appendChild(servicesLink);
+
+    submenuToggle=document.createElement('button');
+    submenuToggle.className='submenu-toggle';
+    submenuToggle.type='button';
+    submenuToggle.setAttribute('aria-expanded','false');
+    submenuToggle.setAttribute('aria-label','Mostrar servicios');
+    submenuToggle.innerHTML='<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m7 9 5 5 5-5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    servicesNav.appendChild(submenuToggle);
+
+    const submenu=document.createElement('div');
+    submenu.className='services-submenu';
+    submenu.setAttribute('aria-label','Servicios de Futuro Digital');
+    submenu.innerHTML=`
+      <a href="desarrollo-web.html"><span>Desarrollo web</span><small>Sitios, catálogos y e-commerce</small></a>
+      <a href="software-a-medida.html"><span>Software a medida</span><small>Aplicaciones, procesos e integraciones</small></a>
+      <a href="hosting-dominios.html"><span>Hosting y dominios</span><small>Infraestructura y publicación</small></a>
+      <a href="correo-corporativo.html"><span>Correo corporativo</span><small>Comunicación con tu propio dominio</small></a>`;
+    servicesNav.appendChild(submenu);
+
+    const servicePages=['servicios.html','desarrollo-web.html','software-a-medida.html','hosting-dominios.html','correo-corporativo.html'];
+    if(servicePages.includes(current)){
+      servicesNav.classList.add('active');
+      servicesLink.setAttribute('aria-current','page');
+    }
+    submenu.querySelectorAll('a').forEach(a=>{
+      if((a.getAttribute('href')||'').toLowerCase()===current)a.setAttribute('aria-current','page');
+    });
+
+    submenuToggle.addEventListener('click',e=>{
+      e.preventDefault();
+      e.stopPropagation();
+      const open=servicesNav.classList.toggle('submenu-open');
+      submenuToggle.setAttribute('aria-expanded',String(open));
+      submenuToggle.setAttribute('aria-label',open?'Ocultar servicios':'Mostrar servicios');
+    });
+    document.addEventListener('click',e=>{
+      if(innerWidth>980&&!servicesNav.contains(e.target)){
+        servicesNav.classList.remove('submenu-open');
+        submenuToggle.setAttribute('aria-expanded','false');
+      }
+    });
+  }
 }
 
 const iconBars='<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke-width="2" stroke-linecap="round"/></svg>';
@@ -47,6 +98,12 @@ backdrop.className='mobile-nav-backdrop';
 backdrop.style.zIndex='40';
 document.body.appendChild(backdrop);
 
+function closeServicesSubmenu(){
+  if(!servicesNav||!submenuToggle)return;
+  servicesNav.classList.remove('submenu-open');
+  submenuToggle.setAttribute('aria-expanded','false');
+  submenuToggle.setAttribute('aria-label','Mostrar servicios');
+}
 function setMenu(open){
   if(!menu||!links)return;
   links.classList.toggle('open',open);
@@ -55,6 +112,7 @@ function setMenu(open){
   menu.setAttribute('aria-expanded',String(open));
   menu.setAttribute('aria-label',open?'Cerrar menú':'Abrir menú');
   menu.innerHTML=open?iconClose:iconBars;
+  if(!open)closeServicesSubmenu();
 }
 if(menu&&links){
   setMenu(false);
